@@ -12,7 +12,6 @@ html {
   min-height: 600px;
   line-height: 1.5; //若出现超过一行的文本，控制行与行之间的距离为字体字号的1.5倍
 }
-
 body {
   font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont,
     'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans GB', 'Heiti SC',
@@ -289,19 +288,19 @@ h3 {
 input::-moz-placeholder,
 textarea::-moz-placeholder {
   color: #999999;
-  font-size: .17rem;
+  font-size: .15rem;
 }
 
 input:-ms-input-placeholder,
 textarea:-ms-input-placeholder {
   color: #999999;
-  font-size: .17rem;
+  font-size: .15rem;
 }
 
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
   color: #999999;
-  font-size: .17rem;
+  font-size: .15rem;
 }
 
 i {
@@ -410,6 +409,8 @@ button,
 .flex-column {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+
 }
 
 .flex-1 {
@@ -507,6 +508,9 @@ button,
 }
 
 /* padding相关 */
+.p-18-0 {
+  padding: .18rem 0;
+}
 
 //border-radius
 .bd4 {
@@ -582,3 +586,26 @@ button,
   justify-content: center;
   align-items: center;
 }
+.isAppointed {
+  height: .44rem;
+  color: #999999;
+  font-size: .17rem;
+background-color: #F5F5F5;
+  border-radius:.04rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+img {
+  display: block;
+  width: 100%;
+}
+img[src=''],
+img:not([src]) {
+  opacity: 0;
+}
+.van-loading__spinner {
+  width: .18rem;
+  height: .18rem;
+}
+

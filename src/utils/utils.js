@@ -50,8 +50,8 @@ export const copy = (id, attr) => {
 
 // 获取缓存 token 方法
 export const common = function () {
-  if (sessionStorage.getItem('assent_token')) {
-    return sessionStorage.getItem('assent_token');
+  if (sessionStorage.getItem('token')) {
+    return sessionStorage.getItem('token');
   }
   return false;
 };
@@ -79,7 +79,7 @@ export const tipsFail = content => {
 };
 
 // 设置tips 提示信息
-export const message = (content) => {
+export const message = content => {
   store.dispatch('loadingHandle', {
     show: true,
     type: 'message',
@@ -90,7 +90,7 @@ export const message = (content) => {
 };
 
 // 设置tips 警告弹框
-export const tipsMsg = (content) => {
+export const tipsMsg = content => {
   store.dispatch('loadingHandle', {
     show: true,
     type: 'warning',
@@ -101,7 +101,7 @@ export const tipsMsg = (content) => {
 };
 
 // 设置tips 撤回弹框
-export const tipsWithdraw = (content) => {
+export const tipsWithdraw = content => {
   store.dispatch('loadingHandle', {
     show: true,
     type: 'withdraw',

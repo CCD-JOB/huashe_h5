@@ -41,3 +41,40 @@
   }
 }
 
+.van-toast.imgTips {
+  color: #DFD393 !important;
+  font-size: .18rem;
+  padding: .17rem .42rem .28rem;
+  .van-icon {
+    img {
+      width:.69rem;
+      height: .69rem;
+    }
+  }
+  .van-toast__text {
+margin-top: .14rem;
+font-weight: 700;
+  }
+}
+.van-toast {
+  width: inherit;
+}
+
+// pdf样式
+//  #demo .loadingBar {
+//   display: none !important;
+// }
+// /deep/.loadEffect.loading {
+//   display: none !important;
+// }
+.pinch-zoom-container {
+  height:  auto !important;
+}
+.pdfjs .loadingBar .progress .glimmer {
+  background-color: rgba(51,51,51,.5) !important;
+
+}
+.pdfjs .loadEffect {
+  background-size: 23% 23% !important;
+}
+

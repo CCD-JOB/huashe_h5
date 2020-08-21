@@ -2,42 +2,83 @@
   <div>
     <div class="normal-block">
       <div class="finPlanner-container">
-        <img class="img-block" src="@/assets/img/finPlanner.png" alt="" />
-        <div class="mask item-block flex-0-center"></div>
-        <div class="content item-block flex-0-center">
-          <div>
-            <div>
-              <span class="text-white s-big-font">柳梦竹</span
-              ><span class="small-font text-theme">（8年经验）</span>
-            </div>
-            <div class="text-white">华设财富高级理财顾问</div>
+        <img class="img-block" src="@/assets/img/consultant@2x.png" alt="" />
+        <div
+          class="mask item-block flex-0-center"
+          :style="{
+            backgroundImage:
+              'url( ' + require(`@/assets/img/consultant@2x.png`) + ' ) '
+          }"
+        ></div>
+        <div class="content item-block">
+          <div class="name">{{myInfo.consultantName}}</div>
+          <div class="phone flex-0-center">
+            <img :src="dprImg('phone.png')" alt="">
+            <div class="txt flex-0-center">{{myInfo.consultantPhone}}</div>
+          </div>
+          <div class="position flex-0-center">
+            <img :src="dprImg('position.png')" alt="">
+            <div class="txt flex-0-center">{{myInfo.consultantPosition}}</div>
           </div>
         </div>
       </div>
-      <div class="info mt18">
-        <div class="title big-font fw700 mb9">个人介绍</div>
-        <div class="txt">
-          2000年入行，累计多年财富管理行业经验，具有丰富的理财业务知识，擅长大类资产配置，根据用户基本状况及需求为客户提供最优质资产配置建议。
-        </div>
+      <div class="icon-list flex-between-center">
+        <div class="icon-item"><img :src="dprImg('consultant-icon1.png')" alt=""></div>
+        <div class="icon-item"><img :src="dprImg('consultant-icon2.png')" alt=""></div>
+        <div class="icon-item"><img :src="dprImg('consultant-icon3.png')" alt=""></div>
+        <div class="icon-item"><img :src="dprImg('consultant-icon4.png')" alt=""></div>
       </div>
+
       <div class="single-btn">
         <div class="flex-center-center">
           <div class="icon">
             <img class="img-block" :src="dprImg('tel.png')" alt="" />
           </div>
-          <span>联系我的理财顾问</span>
+          <a :href="`tel:${myInfo.consultantPhone}`">
+            <span class="text-white">联系我的理财顾问</span>
+          </a>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { aboutMe } from "@/service/coreApi";
 export default {
-  data () {
-    return {};
+  data() {
+    return {
+      myInfo:{},
+    };
   },
   computed: {},
-  methods: {}
+  methods: {
+    getConsultantInfo() {
+      aboutMe({}).then(res => {
+        console.log(res);
+        if (res.status === 1) {
+         this.myInfo=res.resultBody
+        } else {
+          if (res.msg) {
+            this.$toast({
+              message: res.msg
+            });
+          }
+          if(res.errorMsg) {
+            this.$toast({
+              message: res.errorMsg
+            });
+          }
+        }
+      });
+    }
+  },
+  created() {
+    if (this.$route.query.token) {
+      let token = this.$route.query.token;
+      window.sessionStorage.setItem("token", token);
+    }
+    this.getConsultantInfo();
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -47,7 +88,6 @@ export default {
   overflow: hidden;
   .mask {
     height: 0.92rem;
-    background-image: url("../../assets/img/finPlanner.png");
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: 0px -3.56rem;
@@ -60,17 +100,41 @@ export default {
     bottom: 0;
   }
   .content {
-    height: 0.92rem;
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 1;
     background-color: rgba(255, 255, 255, 0.1);
+    padding: .1rem .14rem;
+    color: #fff;
+    img {
+      width:.08rem ;
+      height: .13rem;
+      margin-right: .04rem;
+    }
+    .name {
+      margin-bottom:.05rem ;
+      font-size: .18rem;
+      color: #DFD393;
+    }
+    .phone {
+      margin-bottom: .02rem;
+    }
+    
+  }
+
+}
+.icon-list {
+  margin-top: .18rem;
+.icon-item {
+    width:.8rem ;
+    height: .8rem;
   }
 }
+  
 .single-btn {
-  margin-top: 0.46rem;
+  margin-top: 0.74rem;
   margin-bottom: 0.43rem;
   .icon {
     width: 0.23rem;

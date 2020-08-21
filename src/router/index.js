@@ -13,7 +13,8 @@ requireRouter.keys().forEach(fileName => {
 });
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 });
 // router.addRoutes([
 //   {

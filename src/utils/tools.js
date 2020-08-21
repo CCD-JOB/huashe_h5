@@ -8,8 +8,9 @@ axios.interceptors.request.use(
     // 显示加载中状态
     setAjax(true);
     cfg.href = location.href;
-    cfg.headers.common.token = common() || '';
+    cfg.headers.common.Authorization = common() || '';
     cfg.headers['Content-Type'] = 'application/json'; // 设置跨域头部,虽然很多浏览器默认都是使用json传数据，但咱要考虑IE浏览器。
+    // cfg.headers.Referer = 'http://weixin.qq.com/'; // 设置跨域头部,虽然很多浏览器默认都是使用json传数据，但咱要考虑IE浏览器。
     return cfg;
   },
   err => {
@@ -27,13 +28,13 @@ axios.interceptors.response.use(
     // console.log(res)
     // 隐藏加载中状态
     setAjax(false);
-    if (res.data.code == '401') {
-      // 未登录重定向到首页
-      if (res.config.href === window.location.href) {
-        sessionStorage.setItem('callBackUrl', res.config.href);
-      }
-      window.location.href = urlHtml.url + 'main/login';
-    }
+    // if (res.data.code == '401') {
+    //   // 未登录重定向到首页
+    //   if (res.config.href === window.location.href) {
+    //     sessionStorage.setItem('callBackUrl', res.config.href);
+    //   }
+    //   window.location.href = urlHtml.url + 'main/login';
+    // }
     return res.data;
   },
   err => {
@@ -67,13 +68,14 @@ axios.interceptors.response.use(
 );
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.crossDomain = true;
-axios.defaults.withCredentials = true;
-axios.defaults.timeout = 2000;
+axios.defaults.withCredentials = false;
+// axios.defaults.timeout = 2000;
 
 // 普通接口  注释：提交文件类不可用或要修改
 export const tools = {
   async ajax (cfg) {
-    cfg.url = '/api' + cfg.url;
+    cfg.url = process.env.VUE_APP_BASE_URL + cfg.url;
+    // cfg.url = '/api' + cfg.url;
     // cfg.url = 'https://cloud.luyouor.com/api' + cfg.url;
     // cfg.url = urlHtml.url + cfg.url;
     if (cfg.method === 'get') {
@@ -84,5 +86,17 @@ export const tools = {
 
     const res = await axios(cfg);
     return res;
+  },
+  async ccdAjax (cfg) {
+    cfg.url = 'https://testapp.aifound.cn' + cfg.url;
+    if (cfg.method === 'get') {
+      cfg.params = {
+        ...cfg.data
+      };
+    }
+
+    const res = await axios(cfg);
+    return res;
   }
 };
+

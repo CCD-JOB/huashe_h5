@@ -15,33 +15,25 @@
       </div>
     </div>
     <div class="tests-container  item-block">
-      <div class="test-item mb9" v-for="item in 4" :key="item">
-        <div class="mb14 question big-font"><strong>1.</strong><strong>以下哪项描述正确反映了您的投资经验？</strong></div>
+      <div class="test-item mb9" v-for="(item,index) in topic" :key="index">
+        <div class="mb14 question big-font"><strong>{{index+1}}.</strong><strong>{{item.questionName}}</strong></div>
         <van-checkbox-group v-model="result">
-          <van-checkbox label-position="left" class="mb14 s-big-font" name="a"
-            >65岁以上</van-checkbox
-          >
-          <van-checkbox label-position="left" class="mb14 s-big-font" name="b"
-            >51-65岁</van-checkbox
-          >
-          <van-checkbox label-position="left" class="mb14 s-big-font" name="c"
-            >31-50岁</van-checkbox
-          >
-          <van-checkbox label-position="left" class="mb14 s-big-font" name="d"
-            >18-30岁</van-checkbox
+          <van-checkbox v-for="(answer,index) in item.answers" :key="index" label-position="left" class="mb14 s-big-font" name="a"
+            >{{answer.answerName}}</van-checkbox
           >
         </van-checkbox-group>
       </div>
     </div>
-
       <div @click="submit" class="single-btn">确认提交</div>
   </div>
 </template>
 <script>
+import { getQuestionnaire } from '@/service/coreApi.js';
 export default {
   data () {
     return {
-      result: []
+      result: [],
+      topic: []
     };
   },
   computed: {
@@ -55,7 +47,18 @@ export default {
         confirmButtonText: '继续测评',
         cancelButtonText: '放弃测评'
       });
+    },
+    getQuestionnaireFun () {
+      const params = {};
+      getQuestionnaire(params).then(res => {
+        if (res.status === 1) {
+          this.topic = res.resultBody.topic;
+        }
+      });
     }
+  },
+  created () {
+    this.getQuestionnaireFun();
   }
 };
 </script>

@@ -1,64 +1,100 @@
 <template>
-    <div>
-      <div class="item-block">
-        <div class="title big-font fw700">华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议</div>
-        <div class="sub-title text-info small-font mb18">
-          <span>华设财富</span><span>2020-03-03</span><span>12:58:50</span>
-        </div>
-      </div>
-      <div class="pic"></div>
-      <div class="content">
-        <div class="item">华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议,华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议</div>
-        <div class="item">华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议,华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议</div>
-        <div class="item">华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议,华设财富宣布完成新一轮融资并与知名投资机构签署战略合作协议</div>
-      </div>
-    </div>
+	<div>
+		<div class="item-block">
+			<div class="title big-font fw700">{{resultBody.tittle}}</div>
+			<div :class="{'sub-title':true,'text-info':true,'small-font':true,'mb18':resultBody.picUrl}">
+				<span>{{resultBody.sourceform? resultBody.sourceform :'华设财富'}}</span><span>{{resultBody.publishDate}}</span>
+			</div>
+		</div>
+		<div v-show="resultBody.picUrl" class="pic">
+			<img v-show="resultBody.picUrl" :src="resultBody.picUrl"
+				alt="">
+		</div>
+		<div v-html="resultBody.content"
+			class="content">
+		</div>
+	</div>
 </template>
 <script>
-import { getConsultationInfo } from '@/service/coreApi';
+import { getConsultationInfo } from '@/service/coreApi'
+import {inforDetails} from '@/service/ccdApi'
 export default {
-  data () {
-    return {
-    };
-  },
-  computed: {
-  },
-  methods: {
-    getConsultationInfoFun () {
-      const params = {
-        id: 232
-      };
-      getConsultationInfo(params).then(res => {
-        console.log(res);
-      });
+	data() {
+		return {
+			resultBody: {}
+		}
+	},
+	computed: {},
+	methods: {
+		getConsultationInfoFun() {
+			const params = {
+				id: this.$route.query.consultId,
+				consultationType: this.$route.query.consultationType
+			}
+			getConsultationInfo(params).then(res => {
+				if (res.status === 1) {
+					this.resultBody = res.resultBody
+				}
+			})
+    },
+    getInforDetails(){
+      let params = {
+        id:this.$route.query.consultId
+      }
+      inforDetails(params).then(res => {
+       if(res.code===200){
+       this.resultBody=  Object.assign({},this.resultBody,{
+           content:res.data.content,
+           picUrl:null,
+           publishDate:res.data.releaseDate,
+           tittle:res.data.title,
+           sourceform:res.data.sourceform
+         })
+       }
+
+      })
+
     }
-  },
-  created () {
-    this.getConsultationInfoFun();
-  }
-};
+	},
+	created() {
+    let consultationType = this.$route.query.consultationType
+     if(consultationType==3){
+        this.getInforDetails()
+     }else {
+    this.getConsultationInfoFun()
+     }
+   
+	}
+}
 </script>
 
 <style lang="scss" scoped>
 .title {
-  margin-bottom: .09rem;
+	margin-bottom: 0.09rem;
 }
 .sub-title span {
-  margin-right: .09rem;
+	margin-right: 0.09rem;
 }
 .pic {
-  width: 100%;
-  height: 2.38rem;
-  background-color: purple;
+	width: 100%;
+	height: 2.38rem;
+	img {
+		width: 100%;
+		height: 100%;
+	}
+	img[src=''],
+	img:not([src]) {
+		opacity: 0;
+	}
 }
 .content {
-  padding: .18rem .15rem;
-  .item {
-    margin-bottom: .09rem;
-    &:last-child {
-      margin-bottom: .09rem;
-    }
-  }
-}
+	padding: 0.18rem 0.15rem;
 
+	.item {
+		margin-bottom: 0.09rem;
+		&:last-child {
+			margin-bottom: 0.09rem;
+		}
+	}
+}
 </style>

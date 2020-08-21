@@ -45,15 +45,15 @@ export default {
   // 活动/视频直播 预约列表
   getAppointmentListByPage: '/auth/getAppointmentListByPage', // 参数pageNum pageSize
   // 获取我的基本信息（通过获取请求头加密的用户信息）
-  aboutMe: '/auth/aboutMe', // 参数pageNum pageSize
+  aboutMe: '/user/aboutMe', // 参数pageNum pageSize
   // 通过产品类型获取总资产
   queryAssetsByCode: '/auth/queryAssetsByCode', // 参数pageNum pageSize
   // 根据时间查询付息计划
-  queryInvestPaymentPlan: '/auth/queryInvestPaymentPlan', // 参数pageNum pageSize
+  queryInvestPaymentPlan: '/productTender/queryInvestPaymentPlan', // 参数pageNum pageSize
   // 根据产品类别查询投资记录(需确认投资列表页详情数据)
   queryInvestRecordByPage: '/auth/queryInvestRecordByPage', // 参数pageNum pageSize
   // 查询投资记录详情页
-  queryInvestmentInfo: '/auth/queryInvestmentInfo', // 参数pageNum pageSize
+  queryInvestmentInfo: '/productTender/queryInvestmentInfo', // 参数pageNum pageSize
   // 实名认证接口
   certificationVerify: '/auth/certificationVerify', // 参数pageNum pageSize
   // 绑卡列表
@@ -68,6 +68,28 @@ export default {
   // 选择理财顾问
   chooseConsultant: '/auth/chooseConsultant', // 参数pageNum pageSize
   // 账户注销
-  accountWithDraw: '/auth/accountWithDraw' // 参数pageNum pageSize
+  accountWithDraw: '/auth/accountWithDraw', // 参数pageNum pageSize
+  // faceidH5获取token
+  getH5BizToken: '/faceId/getH5BizToken',
+  // faceidH5获取结果
+  getH5FaceIdResult: '/faceId/getH5FaceIdResult',
+  // 赎回列表
+  getRedeemList: '/productTender/getRedeemList',
+  getRepaymentPlan: '/productTender/getRepaymentPlan',
+  // 投后报告
+  getAttachmentList: '/user/getAttachmentList',
+  // 黑卡商户列表
+  getMerchantList: '/merchant/getMerchantList',
+  // 获取pdf
+  getAttachmentListByProductId: '/user/getAttachmentListByProductId',
+  // 行情详情
+  inforDetails:'/infor/inforDetails',
+  //黑卡预约
+  merchantAppointment:'/merchant/appointment',
 
-};
+  inforDetails: '/infor/inforDetails',
+  // 轮播详情
+  getBannerDetail: '/index/getBannerDetail',
+  // 其他服务详情页
+  getOtherServiceInfo:'/product/getOtherServiceInfo'
+}

@@ -5,26 +5,32 @@
         <span>欢迎来到</span><span class="text-theme">华设财富</span>
       </div>
       <!-- 实名认证过后 -->
-      <!-- <div class="steps-container flex-0-center item-block">
-        <div class="lines line1"></div>
-        <div class="step1 steps">
-          <img :src="dprImg('small-logo.png')" alt="" />
-          <div class="txt">注册</div>
+      <div>
+        <div class="steps-container flex-0-center item-block">
+          <div class="lines line1"></div>
+          <div class="step1 steps">
+            <img :src="dprImg('small-logo.png')" alt="" />
+            <div class="txt">注册</div>
+          </div>
+          <div class="lines line2"></div>
+          <div class="step2 steps">
+            <img :src="dprImg('small-logo.png')" alt="" />
+            <div class="txt">实名认证</div>
+          </div>
+          <div class="lines line3"></div>
+          <div class="step3 steps">
+            <img :src="dprImg('small-logo.png')" alt="" />
+            <div class="txt">选择理财师</div>
+          </div>
+          <div class="lines line4"></div>
         </div>
-        <div class="lines line2"></div>
-        <div class="step2 steps">
-          <img :src="dprImg('small-logo.png')" alt="" />
-          <div class="txt">实名认证</div>
+        <div class="text-center text-theme">
+          选择理财师
         </div>
-        <div class="lines line3"></div>
-        <div class="step3 steps">
-          <img :src="dprImg('small-logo.png')" alt="" />
-          <div class="txt">选择理财师</div>
-        </div>
-        <div class="lines line4"></div>
-      </div> -->
+      </div>
       <!-- 没有实名认证的 -->
-      <div class="steps-container flex-0-center item-block">
+      <!-- <div v-if="realNameStatus!==1">
+        <div class="steps-container flex-0-center item-block">
         <div class="lines line1"></div>
         <div class="step1 steps">
           <img :src="dprImg('small-logo.png')" alt="" />
@@ -45,32 +51,31 @@
       <div class="text-center text-theme">
         选择理财师
       </div>
+      </div> -->
       <ValidationObserver ref="form">
         <form @submit.prevent="submit" action="">
           <div class="cell-form">
-          <ValidationProvider name="理财师姓名" rules="required" v-slot="{ errors }">
-            <van-field
-              v-model="form.name"
-              placeholder="请填写理财师姓名"
-              clearable
-              border
-            />
-            <div class="item-block text-danger">{{ errors[0] }}</div>
-          </ValidationProvider>
-          <ValidationProvider name="理财师工号" rules="required" v-slot="{ errors }">
-            <van-field
-              v-model="form.idCard"
-              placeholder="请填写理财师工号"
-              clearable
-              border
-            />
-            <div class="item-block text-danger">{{ errors[0] }}</div>
-          </ValidationProvider>
-        </div>
+            <ValidationProvider name="理财师姓名" rules="required">
+              <van-field
+                v-model="form.consultantName"
+                placeholder="请填写理财师姓名"
+                clearable
+                border
+              />
+            </ValidationProvider>
+            <ValidationProvider name="理财师工号" rules="required">
+              <van-field
+                v-model="form.consultantId"
+                placeholder="请填写理财师工号"
+                clearable
+                border
+              />
+            </ValidationProvider>
+          </div>
 
-        <div class="item-block">
-          <button type="submit"  class="single-btn">提交</button>
-        </div>
+          <div class="item-block">
+            <button type="submit" class="single-btn">提交</button>
+          </div>
         </form>
       </ValidationObserver>
 
@@ -81,22 +86,65 @@
   </div>
 </template>
 <script>
+import { chooseConsultant } from "@/service/coreApi.js";
 export default {
-  data () {
+  data() {
     return {
       form: {
-        name: '',
-        idCard: ''
-      }
+        consultantName: "",
+        consultantId: ""
+      },
+      realNameStatus: ""
     };
   },
   computed: {},
   methods: {
-    submit () {
-      this.$refs.form.validate().then(res => {
-        console.log(res);
+    submit() {
+      if (!this.form.consultantName && this.form.consultantId) {
+        this.$toast("请填写理财师姓名");
+      } else if (this.form.consultantName && !this.form.consultantId) {
+        this.$toast("请填写理财师工号");
+      } else if (this.form.consultantId && this.form.consultantName) {
+        this.chooseConsultantFun();
+      } else {
+        this.$toast({
+          message: "提交成功",
+          icon: require("@/assets/img/success.png"),
+          className: "imgTips",
+          duration: 500
+        });
+        this.$router.push("/certifyCenter");
+      }
+    },
+    chooseConsultantFun() {
+      const consultantId = this.form.consultantId;
+      const consultantName = this.form.consultantName;
+      const params = {
+        consultantId,
+        consultantName
+      };
+      chooseConsultant(params).then(res => {
+        if (res.status === 1) {
+          this.$toast({
+            message: "绑定成功",
+            icon: require("@/assets/img/success.png"),
+            className: "imgTips",
+            duration: 500
+          });
+          window.setTimeout(() => {
+            this.$router.push("/certifyCenter");
+          }, 300);
+        } else if (res.status === -1) {
+          this.$toast({
+            message: "理财师信息错误,请重新填写",
+            duration: 1000
+          });
+        }
       });
     }
+  },
+  created() {
+    this.realNameStatus = this.$route.params.realNameStatus;
   }
 };
 </script>
@@ -148,9 +196,9 @@ export default {
 }
 .single-btn {
   margin-top: 0.56rem;
-      display: block;
-    width: 100%;
-    border: none;
+  display: block;
+  width: 100%;
+  border: none;
 }
 </style>
 <style lang="scss" scoped>

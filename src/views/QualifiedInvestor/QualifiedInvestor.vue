@@ -35,23 +35,52 @@
       </van-checkbox-group>
     </div>
     <div class="section4 item-block">
-      <div class="tips small-font text-info">华设财富谨遵《私募投资基金兼顾管理暂行办法》之规定，只向特定投资者展示私募基金产品信息，不构成任何投资推介建议。</div>
+      <div class="tips small-font text-info">
+        华设财富谨遵《私募投资基金兼顾管理暂行办法》之规定，只向特定投资者展示私募基金产品信息，不构成任何投资推介建议。
+      </div>
     </div>
-    <div class="item-block">
-    <div class="single-btn">确认为合格投资者</div>
+    <div style="margin-bottom: 0.98rem;" class="item-block">
+      <div @click="confim" class="single-btn">确认为合格投资者</div>
     </div>
-
   </div>
 </template>
 <script>
+import { QFIICertification } from "@/service/coreApi";
+import getRouteToken from '@/mixins/getRouteToken'
 export default {
-  data () {
+   mixins: [getRouteToken],
+  data() {
     return {
-      result: []
+      result: ['a','b','c']
     };
   },
   computed: {},
-  methods: {}
+  methods: {
+    // 投资者认证
+    QFIICertificationFun() {
+      QFIICertification({}).then(res => {
+        if (res.status === 1) {
+          this.$toast({
+             message: '认证成功',
+             duration:500
+          });
+          window.setTimeout(() => {
+            this.$router.push("/certifyCenter");
+          }, 300);
+        }
+      });
+    },
+    confim() {
+      if (this.result.length === 3) {
+        this.QFIICertificationFun();
+      }else {
+        this.$toast('需全部勾选才能进行投资者认证')
+      }
+    },
+  },
+  created() {
+    this.getRouteToken()
+  },
 };
 </script>
 
@@ -84,11 +113,9 @@ export default {
   border-bottom: 1px solid #eee;
 }
 .section4 .tips {
-  padding: .18rem 0 .41rem;
+  padding: 0.18rem 0 0.41rem;
 }
-.single-btn {
-  margin-bottom: .98rem;
-}
+
 </style>
 <style lang="scss" scoped>
 /deep/ .van-checkbox__icon .van-icon {
@@ -115,5 +142,4 @@ export default {
 /deep/.van-checkbox-group {
   padding-left: 0.13rem;
 }
-
 </style>
